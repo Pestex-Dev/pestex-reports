@@ -194,7 +194,7 @@
       </div>
       <div class="field">
         <label>How Many Stations Were Serviced?</label>
-        <input type="number" id="t-stations-serviced" placeholder="e.g. 6">
+        <input type="text" id="t-stations-serviced" placeholder="e.g. 6 stations or All stations checked">
       </div>
     </div>
     <div class="form-section">
@@ -219,12 +219,23 @@
       </div>
     </div>
     <div class="form-section">
-      <div class="form-section-title">Technician Sign-Off</div>
+      <div class="form-section-title">Sign-Off</div>
       <div class="field">
         <label>Technician Signature</label>
         <div class="sig-pad-wrap">
           <div class="sig-pad-label"><span>Sign below with your finger</span><button class="sig-clear-btn" onclick="clearSig('t-sig-canvas')">Clear</button></div>
           <canvas id="t-sig-canvas" class="sig-canvas" width="600" height="100"></canvas>
+        </div>
+      </div>
+      <div class="field">
+        <label>Client Representative Name</label>
+        <input type="text" id="t-client-rep" placeholder="Client representative full name">
+      </div>
+      <div class="field">
+        <label>Client Representative Signature</label>
+        <div class="sig-pad-wrap">
+          <div class="sig-pad-label"><span>Client signs below</span><button class="sig-clear-btn" onclick="clearSig('t-client-sig-canvas')">Clear</button></div>
+          <canvas id="t-client-sig-canvas" class="sig-canvas" width="600" height="100"></canvas>
         </div>
       </div>
     </div>
@@ -424,6 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
   try { document.getElementById('t-date').value = today; } catch(e){}
   try { document.getElementById('p-date').value = today; } catch(e){}
   try { initSigPad('t-sig-canvas'); } catch(e){}
+  try { initSigPad('t-client-sig-canvas'); } catch(e){}
   try { initSigPad('p-sig-canvas'); } catch(e){}
   try { initSigPad('p-client-sig-canvas'); } catch(e){}
 });
@@ -575,6 +587,8 @@ async function submitTermite() {
     bait_product: v('t-bait-product'),
     next_service: v('t-next-service'),
     notes: v('t-notes'),
+    client_rep_name: v('t-client-rep'),
+    client_rep_signature: getSigDataURL('t-client-sig-canvas'),
     signature: getSigDataURL('t-sig-canvas'),
     photos: JSON.stringify(imageStore['t-images'])
   };
@@ -647,7 +661,7 @@ function startNewReport() {
   document.querySelectorAll('input[type="text"],input[type="number"],textarea').forEach(el => el.value='');
   document.querySelectorAll('select').forEach(el => el.selectedIndex=0);
   document.querySelectorAll('input[type="hidden"]').forEach(el => el.value='');
-  clearSig('t-sig-canvas'); clearSig('p-sig-canvas'); clearSig('p-client-sig-canvas');
+  clearSig('t-sig-canvas'); clearSig('t-client-sig-canvas'); clearSig('p-sig-canvas'); clearSig('p-client-sig-canvas');
   imageStore['t-images']=[]; imageStore['p-images']=[];
   document.getElementById('t-previews').innerHTML=''; document.getElementById('p-previews').innerHTML='';
   document.getElementById('t-date').value=today; document.getElementById('p-date').value=today;
